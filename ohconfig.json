@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-26T22:42:55.619Z",
+  "updated": "2026-03-26T22:45:24.365Z",
   "properties": [
     {
       "address": "123 Main st, Toronto M2N19P",
@@ -13,15 +13,15 @@
       "agentEmail": "ytluo3718@gmail.com"
     },
     {
-      "address": "",
-      "lotSize": "",
-      "sqft": "",
-      "yearBuilt": "",
-      "tax": "",
-      "features": "",
-      "agentName": "",
-      "agentPhone": "",
-      "agentEmail": ""
+      "address": "459 jane st , Richmond Hill",
+      "lotSize": "82x123",
+      "sqft": "8334",
+      "yearBuilt": "1999",
+      "tax": "8923",
+      "features": "allslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklks",
+      "agentName": "Peter Luo",
+      "agentPhone": "6478243718",
+      "agentEmail": "peterluo@peterluo.com"
     },
     {
       "address": "",

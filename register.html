@@ -241,7 +241,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 // ════════════════════════════════════════════════════════════════════
 
 // Google Apps Script Web App URL:
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj51h65UVWakjBUW5ur0xssQWSQMvcQbqE4XkDAH8eNa2cbP-3MxTjtoQYdc5N7p2lRw/exec';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWI-hhzVBFg2cY_KEFo7zYU4ZHXH7Z2_bg10rp-tLvwH4czWH8kg2OOU_csEY2cJKZkA/exec';
 
 // Config JSON URL (relative — same repo):
 var CONFIG_URL = 'ohconfig.json';
@@ -465,7 +465,8 @@ function submitForm(e){
     q1:q1, q2:q2, q3:q3, q4:q4,
     notes:notes,
     property:PROPERTY.address||'',
-    agent:AGENT.name||''
+    agent:AGENT.name||'',
+    agentEmail:AGENT.email||''
   };
 
   // Show loading state
@@ -519,7 +520,7 @@ function sendToGoogleSheets(record, callback){
   form.style.display = 'none';
 
   // Add each field as a hidden input
-  var fields = ['name','phone','email','area','q1','q2','q3','q4','notes','property','agent'];
+  var fields = ['name','phone','email','area','q1','q2','q3','q4','notes','property','agent','agentEmail'];
   fields.forEach(function(key){
     var input = document.createElement('input');
     input.type = 'hidden';

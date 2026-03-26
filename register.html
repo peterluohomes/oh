@@ -223,7 +223,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 
   <a class="sms-btn" id="sms-btn" href="#">
     <span class="sms-btn-icon">💬</span>
-    <span data-i18n="sms-btn">Click Here to Text Peter to be Invited in Now.</span>
+    <span data-i18n="sms-btn">Click Here to be Invited in</span>
   </a>
 
   <button class="ty-skip" onclick="location.reload()" data-i18n="ty-skip">Skip — I'm all set</button>
@@ -243,8 +243,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
 // Google Apps Script Web App URL:
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj51h65UVWakjBUW5ur0xssQWSQMvcQbqE4XkDAH8eNa2cbP-3MxTjtoQYdc5N7p2lRw/exec';
 
-// Config JSON URL (GitHub Pages on the oh repo):
-var CONFIG_URL = 'https://peterluohomes.github.io/oh/ohconfig.json';
+// Config JSON URL (relative — same repo):
+var CONFIG_URL = 'ohconfig.json';
 
 // Fallback redirect if no valid property:
 var FALLBACK_URL = 'https://peterluo.homes';
@@ -262,7 +262,7 @@ var AGENT = {
 
 // ════════════════════════════════════════════════════════════════════
 // URL parameter &no=1 through &no=10 selects the property slot.
-// The config is fetched from ohconfig.json on GitHub Pages.
+// The config is fetched from ohconfig.json in the same repo.
 // If no valid &no= param, redirect to fallback URL.
 // ════════════════════════════════════════════════════════════════════
 
@@ -272,7 +272,6 @@ var AGENT = {
   var slotNum = parseInt(params.get('no'), 10);
 
   if(!slotNum || slotNum < 1 || slotNum > 10){
-    // No valid slot — redirect
     window.location.href = FALLBACK_URL;
     return;
   }
@@ -288,7 +287,6 @@ var AGENT = {
   .then(function(config){
     var slot = config.properties && config.properties[slotNum - 1];
     if(!slot || !slot.address || !slot.address.trim()){
-      // Slot is empty — redirect
       window.location.href = FALLBACK_URL;
       return;
     }
@@ -358,8 +356,8 @@ var I18N = {
     'ph-notes':'Notes or questions about the property…',
     'submit':'Register →',
     'ty-title':'Thank You!',
-    'ty-sub':'You\'re registered.<br>{agent} will be in touch soon.',
-    'sms-btn':'Text {agent} Now',
+    'ty-sub':'You\'re registered.',
+    'sms-btn':'Click Here to be Invited in',
     'ty-skip':'Skip — I\'m all set',
     'lang-btn':'中文'
   },
@@ -377,8 +375,8 @@ var I18N = {
     'ph-notes':'关于房产的备注或问题…',
     'submit':'登记 →',
     'ty-title':'谢谢！',
-    'ty-sub':'您已登记成功。<br>{agent}会尽快与您联系。',
-    'sms-btn':'发短信给{agent}',
+    'ty-sub':'您已登记成功。',
+    'sms-btn':'点击这里发短信进入',
     'ty-skip':'跳过',
     'lang-btn':'English'
   }
@@ -481,10 +479,8 @@ function submitForm(e){
     btn.disabled = false;
 
     // Build SMS link — use hosting agent's phone
-    var agentFirst = AGENT.name.split(' ')[0] || 'Peter';
-    var smsBody = 'Hi '+agentFirst+', this is '+name+'.';
-    if(PROPERTY.address) smsBody += ' I am here to visit the open house at '+PROPERTY.address+'.';
-    smsBody += ' ';
+    var agentFirst = (AGENT.name||'Peter').split(' ')[0];
+    var smsBody = 'Hi, '+agentFirst+', this is '+name+'. I am at Front Door for Open House Now.';
 
     // Detect iOS vs Android for SMS URI format
     var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -561,8 +557,7 @@ function showToast(msg){
 }
 
 // ── Init ───────────────────────────────────────────────────────────
-// Property banner and lang are set after config loads (see config fetch above).
-// Set initial lang for elements that are visible during load:
+// Property banner and lang are refreshed after config loads (see config fetch above).
 setLang('en');
 </script>
 </body>

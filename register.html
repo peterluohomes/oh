@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Open House — Peter Luo</title>
+<title>Open House Registration</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -132,7 +132,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);
     <button class="lang-toggle" onclick="toggleLang()">中文</button>
     <div class="header-badge">Pinnacle Listing System</div>
     <h1>Open House</h1>
-    <p>Peter Luo — RE/MAX Realtron</p>
+    <p id="header-agent"></p>
   </header>
 
   <!-- Property Info (set via URL params or config below) -->
@@ -259,6 +259,9 @@ var AGENT = {
   name: 'Peter Luo', phone: '6478243718', email: 'peterluo@peterluo.com'
 };
 
+// Set initial header agent line from defaults
+document.getElementById('header-agent').textContent = AGENT.name + ' — RE/MAX Realtron';
+
 // ════════════════════════════════════════════════════════════════════
 // URL parameter &no=1 through &no=10 selects the property slot.
 // The config is fetched from ohconfig.json in the same repo.
@@ -305,7 +308,8 @@ var AGENT = {
 
     // Update agent display in header
     var agentLine = AGENT.name + ' — RE/MAX Realtron';
-    document.querySelector('.header p').textContent = agentLine;
+    document.getElementById('header-agent').textContent = agentLine;
+    document.title = 'Open House — ' + AGENT.name;
 
     // Render and show
     renderPropertyBanner();
@@ -384,7 +388,7 @@ var I18N = {
 function setLang(lang){
   currentLang = lang;
   var dict = I18N[lang]||I18N.en;
-  var agentFirst = (AGENT.name||'Peter').split(' ')[0];
+  var agentFirst = (AGENT.name||'Agent').split(' ')[0];
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var k=el.getAttribute('data-i18n'); if(dict[k]) el.textContent=dict[k].replace(/\{agent\}/g, agentFirst);
   });
@@ -479,7 +483,7 @@ function submitForm(e){
     btn.disabled = false;
 
     // Build SMS link — use hosting agent's phone
-    var agentFirst = (AGENT.name||'Peter').split(' ')[0];
+    var agentFirst = (AGENT.name||'Agent').split(' ')[0];
     var smsBody = 'Hi, '+agentFirst+', this is '+name+'. I am at Front Door for Open House Now.';
 
     // Detect iOS vs Android for SMS URI format

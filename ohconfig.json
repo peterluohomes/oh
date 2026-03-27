@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-27T17:13:03.325Z",
+  "updated": "2026-03-27T17:13:20.493Z",
   "properties": [
     {
       "address": "86-8 Townwood Dr",
@@ -13,15 +13,15 @@
       "agentEmail": "peterluo@peterluo.com"
     },
     {
-      "address": "459 jane st , Richmond Hill",
-      "lotSize": "82x123",
-      "sqft": "8334",
-      "yearBuilt": "1999",
-      "tax": "8923",
-      "features": "allslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklksallslkslklks",
-      "agentName": "Peter Luo",
-      "agentPhone": "6478243718",
-      "agentEmail": "peterluo@peterluo.com"
+      "address": "",
+      "lotSize": "",
+      "sqft": "",
+      "yearBuilt": "",
+      "tax": "",
+      "features": "",
+      "agentName": "",
+      "agentPhone": "",
+      "agentEmail": ""
     },
     {
       "address": "",

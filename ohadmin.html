@@ -146,6 +146,7 @@ var slots = [];
 for(var i=0;i<MAX_SLOTS;i++){
   slots.push({
     address:'', lotSize:'', sqft:'', yearBuilt:'', tax:'', features:'',
+    listingUrl:'', virtualTourUrl:'',
     agentName:'', agentPhone:'', agentEmail:''
   });
 }
@@ -194,6 +195,11 @@ function render(){
     html += '<div class="fg-charcount" id="cc-'+i+'">'+(s.features?s.features.length:0)+'/'+MAX_FEAT_CHARS+'</div>';
     html += '</div>';
 
+    // URL fields
+    html += '<div class="slot-section-lbl">Listing Links</div>';
+    html += fgUrl('MLS Listing URL','url',i,'listingUrl',s.listingUrl,'https://realtor.ca/listing...',60);
+    html += fgUrl('Virtual Tour URL','url',i,'virtualTourUrl',s.virtualTourUrl,'https://my.matterport.com/...',60);
+
     // Agent section
     html += '<div class="slot-section-lbl">Hosting Agent</div>';
     html += fg('Agent Name','text',i,'agentName',s.agentName,'Peter Luo');
@@ -220,6 +226,15 @@ function fg(label,type,slotIdx,field,value,placeholder){
     +'</div>';
 }
 
+function fgUrl(label,type,slotIdx,field,value,placeholder,maxLen){
+  var len = (value||'').length;
+  return '<div class="fg">'
+    +'<label class="fg-lbl">'+label+' (max '+maxLen+' chars)</label>'
+    +'<input class="fg-inp" type="'+type+'" id="f-'+slotIdx+'-'+field+'" value="'+escAttr(value||'')+'" placeholder="'+esc(placeholder||'')+'" maxlength="'+maxLen+'" oninput="updateUrlField('+slotIdx+',\''+field+'\',this.value,'+maxLen+')">'
+    +'<div class="fg-charcount" id="uc-'+slotIdx+'-'+field+'">'+len+'/'+maxLen+'</div>'
+    +'</div>';
+}
+
 function toggleSlot(i){
   var el = document.getElementById('slot-'+i);
   el.classList.toggle('open');
@@ -240,6 +255,14 @@ function updateField(i,field,val){
   }
 }
 
+function updateUrlField(i,field,val,maxLen){
+  slots[i][field] = val;
+  var cc = document.getElementById('uc-'+i+'-'+field);
+  var len = val.length;
+  cc.textContent = len+'/'+maxLen;
+  cc.classList.toggle('over', len >= maxLen);
+}
+
 function updateFeat(i){
   var el = document.getElementById('f-'+i+'-features');
   slots[i].features = el.value;
@@ -251,7 +274,7 @@ function updateFeat(i){
 
 function clearSlot(i){
   if(!confirm('Clear all data for slot #'+(i+1)+'?')) return;
-  slots[i] = {address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',agentName:'',agentPhone:'',agentEmail:''};
+  slots[i] = {address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',listingUrl:'',virtualTourUrl:'',agentName:'',agentPhone:'',agentEmail:''};
   render();
   showToast('Slot #'+(i+1)+' cleared');
 }
@@ -290,9 +313,9 @@ function loadFromGitHub(){
     if(Array.isArray(config.properties)){
       for(var i=0;i<MAX_SLOTS;i++){
         if(config.properties[i]){
-          slots[i] = Object.assign({address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',agentName:'',agentPhone:'',agentEmail:''}, config.properties[i]);
+          slots[i] = Object.assign({address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',listingUrl:'',virtualTourUrl:'',agentName:'',agentPhone:'',agentEmail:''}, config.properties[i]);
         } else {
-          slots[i] = {address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',agentName:'',agentPhone:'',agentEmail:''};
+          slots[i] = {address:'',lotSize:'',sqft:'',yearBuilt:'',tax:'',features:'',listingUrl:'',virtualTourUrl:'',agentName:'',agentPhone:'',agentEmail:''};
         }
       }
     }
@@ -309,10 +332,18 @@ function saveToGitHub(){
   var token = getToken();
   if(!token) return;
 
-  // Validate — at least check features length
+  // Validate — at least check features length and URL lengths
   for(var i=0;i<MAX_SLOTS;i++){
     if(slots[i].features && slots[i].features.length > MAX_FEAT_CHARS){
       showToast('Slot #'+(i+1)+' features exceeds '+MAX_FEAT_CHARS+' chars','error');
+      return;
+    }
+    if(slots[i].listingUrl && slots[i].listingUrl.length > 60){
+      showToast('Slot #'+(i+1)+' listing URL exceeds 60 chars','error');
+      return;
+    }
+    if(slots[i].virtualTourUrl && slots[i].virtualTourUrl.length > 60){
+      showToast('Slot #'+(i+1)+' virtual tour URL exceeds 60 chars','error');
       return;
     }
   }

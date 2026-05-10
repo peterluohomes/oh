@@ -494,7 +494,8 @@ function submitForm(e){
 
     // Build SMS link — use hosting agent's phone
     var agentFirst = (AGENT.name||'Agent').split(' ')[0];
-    var smsBody = 'Hi, '+agentFirst+', this is '+name+'. I am at Front Door for Open House Now.';
+    var propAddr = PROPERTY.address || 'the open house';
+    var smsBody = 'Hi '+agentFirst+', this is '+name+'. I\'m at the front door for the open house at '+propAddr+'.';
 
     // Detect iOS vs Android for SMS URI format
     var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);

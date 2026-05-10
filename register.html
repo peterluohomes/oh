@@ -482,35 +482,33 @@ function submitForm(e){
     agentEmail:AGENT.email||''
   };
 
-  // Show loading state
-  var btn = document.getElementById('submit-btn');
-  btn.classList.add('loading');
-  btn.disabled = true;
+  // Build SMS link NOW — must use the fresh tap gesture before any async work.
+  // Mobile browsers block sms: navigation if it happens after a delay.
+  var agentFirst = (AGENT.name||'Agent').split(' ')[0];
+  var propAddr = PROPERTY.address || 'the open house';
+  var smsBody = 'Hi '+agentFirst+', this is '+name+'. I\'m at the front door for the open house at '+propAddr+'.';
 
-  // Send to Google Sheets (Apps Script handles email + logging)
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var agentPhone = AGENT.phone || PETER_PHONE;
+  var smsUrl = 'sms:'+agentPhone+(isIOS?'&':'?')+'body='+encodeURIComponent(smsBody);
+
+  // Wire up thank-you screen fallback button (for users who cancel the SMS app)
+  document.getElementById('sms-btn').href = smsUrl;
+  document.getElementById('ty-name').textContent = name;
+
+  // Fire Sheets sync in background — don't wait for it
   sendToGoogleSheets(record, function(success){
-    btn.classList.remove('loading');
-    btn.disabled = false;
-
-    // Build SMS link — use hosting agent's phone
-    var agentFirst = (AGENT.name||'Agent').split(' ')[0];
-    var propAddr = PROPERTY.address || 'the open house';
-    var smsBody = 'Hi '+agentFirst+', this is '+name+'. I\'m at the front door for the open house at '+propAddr+'.';
-
-    // Detect iOS vs Android for SMS URI format
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    var agentPhone = AGENT.phone || PETER_PHONE;
-    var smsUrl = 'sms:'+agentPhone+(isIOS?'&':'?')+'body='+encodeURIComponent(smsBody);
-    document.getElementById('sms-btn').href = smsUrl;
-
-    // Show thank you
-    document.getElementById('ty-name').textContent = name;
-    showScreen('screen-thankyou');
-
     if(!success){
+      // Toast will show on the thank-you screen if visitor returns to it
       showToast('Saved — will sync when online');
     }
   });
+
+  // Open SMS app immediately using the live tap gesture
+  window.location.href = smsUrl;
+
+  // Show thank-you screen behind the SMS app (visible when user returns to browser)
+  showScreen('screen-thankyou');
 }
 
 function sendToGoogleSheets(record, callback){
